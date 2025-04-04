@@ -44,9 +44,9 @@ const EventServices = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-100">
+    <section className="py-4 pb-12">
       <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <h2 className="text-4xl font-bold text-center mb-4 text-amber-600">
           Hotel Highway King Party & Events Services
         </h2>
         <p className="text-gray-500 mb-8">
@@ -57,17 +57,17 @@ const EventServices = () => {
           {services.map((service) => (
             <div
               key={service.id}
-              className="bg-white rounded-lg shadow-lg p-6 text-center transition-transform duration-300 transform hover:scale-105 hover:shadow-2xl"
+              className="bg-white rounded-lg shadow-lg p-6 text-center"
             >
               <img
                 src={service.img}
                 alt={service.title}
-                className="w-full h-40 object-cover rounded-lg mb-4 transition-transform duration-300 transform hover:scale-110"
+                className="w-full h-40 object-cover rounded-lg mb-4 "
               />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{service.title}</h3>
+              <h3 className="text-xl font-semibold text-amber-900 mb-2">{service.title}</h3>
               <p className="text-gray-600 text-sm mb-4">{service.description}</p>
               <Link to={service.link}> {/* Use Link component here */}
-                <button className="mt-4 bg-black text-white px-6 py-2 rounded-lg transition-all duration-300 hover:bg-yellow-500 hover:text-black">
+                <button className="mt-4 bg-amber-600 text-white font-bold hover:bg-amber-500 py-3 px-4 rounded-md transition duration-300 cursor-pointer">
                   Learn More
                 </button>
               </Link>

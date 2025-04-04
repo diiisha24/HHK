@@ -16,9 +16,6 @@ import propertyImage6 from "../images/neemrana.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-
-
 const PropertySlider = () => {
   const navigate=useNavigate();
   const [properties, setProperties] = useState([])
@@ -129,8 +126,8 @@ const PropertySlider = () => {
   // ];
 
   return (
-    <div className="container mx-auto py-8">
-      <h2 className="text-2xl font-bold text-center mb-4">
+    <div className="container mx-auto max-w-7xl pt-24">
+      <h2 className="text-4xl font-bold text-center mb-4 text-amber-600">
         Our Curated Property Selection
       </h2>
       <p className="text-center text-gray-500 mb-6">
@@ -148,21 +145,101 @@ const PropertySlider = () => {
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
-        className="w-full"
-        
       >
-        {properties.map((property,index) => (
+        {properties.map((property, index) => (
           <SwiperSlide
-          key={property._id}
-          className="p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:translate-y-2"
-          onClick={() => {
-            if (property.link) {
-              navigate(property.link);
-            }
-          }} // Only Jaipur property has navigation
-        >
-            <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 mb-12">
-              
+            key={property._id}
+            className="p-4 px-6 transform transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              if (property.link) {
+                navigate(property.link);
+              }
+            }}
+          >
+            <div className="bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:shadow-lg transform mb-12 h-full flex flex-col">
+              <img
+                src={img[property.link]}
+                alt={property.title}
+                className="w-full h-48 object-cover transition-transform duration-500 hover:scale-110"
+              />
+              <div className="p-4 flex flex-col flex-grow">
+                <h3 className="text-lg text-amber-900 font-semibold">{property.title}</h3>
+                <p className="text-gray-500">{property.location}</p>
+                <p className="font-bold text-amber-900 text-lg">
+                  {property.price} <span className="text-sm">Winter Sale</span>
+                </p>
+                <div className="flex text-gray-600 text-sm mt-2">
+                  <span className="mr-2">🛏 {property.bedrooms} Bedrooms</span>
+                  <span className="mr-2">🛁 {property.baths} Baths</span>
+                  <span>👥 {property.guests} Guests</span>
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+        <style jsx>{`
+          .swiper {
+            padding: 0 30px;
+          }
+          .swiper-slide {
+            height: auto !important; /* Ensure slides stretch to tallest content */
+            display: flex; /* Use flex to align content */
+            flex-direction: column;
+          }
+          .swiper-button-prev:after, 
+          .swiper-button-next:after {
+            font-size: 16px;
+          }
+          .swiper-pagination-bullet-active {
+            background-color: var(--color-amber-600);
+            opacity: 1;
+          }
+          .swiper-button-next,
+          .swiper-button-prev {
+            color: var(--color-amber-600);
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--color-amber-600);
+            border-radius: 100%;
+            background-color: white;
+          }
+          .swiper-button-disabled {
+            display: none !important;
+          }
+          .swiper-button-next:hover,
+          .swiper-button-prev:hover {
+            color: white;
+            background-color: var(--color-amber-500);
+          }
+          .swiper-pagination {
+            position: relative;
+            padding-top: 10px;
+          }
+        `}</style>
+      </Swiper>
+      {/* <Swiper
+        modules={[Navigation, Pagination]}
+        navigation
+        pagination={{ clickable: true }}
+        spaceBetween={10}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+      >
+        {properties.map((property, index) => (
+          <SwiperSlide
+            key={property._id}
+            className="p-4 px-8 transform transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              if (property.link) {
+                navigate(property.link);
+              }
+            }}
+          >
+            <div className="bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:shadow-lg transform mb-12">
               <img
                 src={img[property.link]}
                 alt={property.title}
@@ -182,8 +259,43 @@ const PropertySlider = () => {
               </div>
             </div>
           </SwiperSlide>
-        ))}
-      </Swiper>
+        )
+        )}
+        <style jsx>{`
+          .swiper{
+            padding: 0 40px;
+          }
+          .swiper-button-prev:after, 
+          .swiper-button-next:after{
+            font-size: 20px;
+          }
+          .swiper-pagination-bullet-active {
+            background-color: var(--color-amber-600);
+            opacity: 1;
+          }
+          .swiper-button-next,
+          .swiper-button-prev {
+            color: white;
+            margin: 0px 10px;
+            border: 1px solid var(--color-amber-600);
+            border-radius: 6px;
+            background-color: var(--color-amber-600);
+          }
+          .swiper-button-disabled{
+              display: none !important;
+          }
+          .swiper-button-next:hover,
+          .swiper-button-prev:hover {
+            color: white;
+            background-color: var(--color-amber-500);
+          }
+          .swiper-pagination{
+            position: relative;
+            padding-top: 10px;
+          }
+          
+        `}</style>
+        </Swiper> */}
     </div>
   );
 };

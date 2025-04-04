@@ -12,9 +12,9 @@ const data = [
 ];
 
 const Dashboard = () => {
-  if(!localStorage.getItem("authToken")) {
-    window.location.href = "/admin/login";
-  }
+  // if(!localStorage.getItem("authToken")) {
+  //   window.location.href = "/admin/login";
+  // }
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -49,22 +49,22 @@ const HotelsSection = () => {
   const visibleHotels = showMore ? hotels : hotels.slice(0, 6);
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-4 pb-12">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">Our Hotels</h2>
+        <h2 className="text-4xl font-bold text-center mb-8 text-amber-600">Our Properties</h2>
         
       </div>
 
       <div className="container mx-auto grid md:grid-cols-3 gap-6 px-6">
         {visibleHotels.map((hotel, index) => (
-          <Link to={`/home/${hotel.title}route`} key={index}>
-            <div className="relative overflow-hidden rounded-lg transition-transform duration-300 ease-in-out hover:-translate-y-2 cursor-pointer">
+          <Link to={hotel.link} key={index}>
+            <div className="relative overflow-hidden rounded-lg transition-transform duration-300 ease-in-out cursor-pointer">
               <img
                 src={Imgs[hotel.title.toLowerCase()]}
                 alt={hotel.title}
                 className="w-full h-64 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105 hover:-translate-y-2"
               />
-              <div className="absolute top-3 right-3 bg-white text-gray-900 px-3 py-1 font-bold rounded shadow">
+              <div className="absolute top-3 right-3 bg-white text-amber-900 px-3 py-1 font-bold rounded shadow">
                 {hotel.title}
               </div>
             </div>

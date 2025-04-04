@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-// Import images for corporate booking and meeting space
-import corporateBookingImage from '../assets/images/corporate.jpg';  // Replace with actual path
-import meetingSpaceImage from '../assets/images/occassion.jpg';  // Replace with actual path
+import corporateBookingImage from '../assets/images/corporate.jpg';
+import meetingSpaceImage from '../assets/images/occassion.jpg';
+import corporate_form_booking from '../assets/images/P1938283.jpg'
 
 const CorporateBooking = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +13,10 @@ const CorporateBooking = () => {
     phone: '',
     bookingDetails: ''
   });
-  const [faqOpen, setFaqOpen] = useState(null);  // State to track which FAQ is open
+  const [faqOpen, setFaqOpen] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,45 +25,75 @@ const CorporateBooking = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Corporate booking request submitted!');
+    setIsSubmitting(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/corporate-bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) throw new Error('Failed to submit booking request');
+      const json = await response.json();
+      if (json.success) {
+        setSuccess('Corporate booking request submitted successfully!');
+        setFormData({
+          companyName: '',
+          contactPerson: '',
+          email: '',
+          phone: '',
+          bookingDetails: ''
+        });
+      } else {
+        throw new Error(json.message || 'Submission failed');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleFAQ = (index) => {
-    setFaqOpen(faqOpen === index ? null : index);  // Toggle the FAQ question
+    setFaqOpen(faqOpen === index ? null : index);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-yellow-500 to-red-600 cursor-pointer">
+    <div className="min-h-screen bg-gradient-to-r from-amber-400 to-amber-600">
       {/* Hero Section */}
-      <div className="pt-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="pt-24 pb-20 px-6 sm:px-8 lg:px-12 lg:pl-28">
+        <div className="mx-auto">
+          <div className="flex grid-cols-1 gap-7 lg:grid-cols-2 items-center">
             <motion.div
               className="text-white"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
             >
-              <h1 className="text-5xl font-extrabold mb-6">
-                Welcome To<br />The Corporate<br />Booking At<br />Hotel Highway King
+              <h1 className="text-5xl font-extrabold mb-6 max-w-md">
+                Welcome To The Corporate Booking At Hotel Highway King
               </h1>
-              <p className="text-xl mb-6">
+              <p className="text-xl mb-6 max-w-lg">
                 We understand the unique needs and requirements of corporate travelers. Book with us for a range of exclusive benefits and services tailored specifically for corporate stays.
               </p>
             </motion.div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 w-full max-w-3xl mx-auto">
               <motion.img 
                 src={corporateBookingImage} 
                 alt="Corporate Booking" 
-                className="rounded-lg shadow-lg transition-transform duration-300 hover:scale-105" 
+                className="rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 w-full" 
                 loading="lazy"
               />
               <motion.img 
                 src={meetingSpaceImage} 
                 alt="Meeting Space" 
-                className="rounded-lg mt-8 shadow-lg transition-transform duration-300 hover:scale-105" 
+                className="rounded-lg mt-8 shadow-lg transition-transform duration-300 hover:scale-105 w-full" 
                 loading="lazy"
               />
             </div>
@@ -71,20 +103,23 @@ const CorporateBooking = () => {
 
       {/* Benefits Section */}
       <div className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto flex flex-col items-center">
           <motion.h2
-            className="text-3xl font-extrabold text-center mb-12 text-gray-800"
+            className="text-4xl font-bold text-center mb-4 text-amber-600"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
             Corporate Bookings With Exclusive Benefits
           </motion.h2>
+          <p className="text-center text-gray-600 mb-12 max-w-4xl">
+            Book your corporate stay with us today and experience the perfect blend of comfort, convenience, and personalized service.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
-                className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:bg-gradient-to-r hover:from-yellow-500 hover:to-red-600 hover:text-white"
+                className="p-6 bg-white rounded-lg shadow-lg transform transition-all duration-300 hover:shadow-2xl overflow-hidden border-t-4 border-amber-400"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: index * 0.2 }}
@@ -98,91 +133,119 @@ const CorporateBooking = () => {
       </div>
 
       {/* Booking Form Section */}
-      <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-100">
-        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+      <div className="bg-amber-500 flex flex-col md:flex-row items-center justify-center max-h-[700px] h-[700px]">
+        {/* Left Side: Image */}
+        <div className="md:w-1/2 w-full h-full">
+          <img
+            src={corporate_form_booking}
+            alt="Hotel Interior"
+            className="w-full h-full object-cover shadow-lg"
+          />
+        </div>
+
+        {/* Right Side: Form */}
+        <div className="md:w-1/2 w-full p-8 px-20 flex flex-col justify-center h-full">
           <motion.h2
-            className="text-3xl font-extrabold text-center mb-8 text-gray-800"
+            className="text-4xl font-bold text-white mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
             Want To Talk With Us?
           </motion.h2>
-          <p className="text-center text-gray-600 mb-12">
+          <p className="text-white/80 mb-12">
             Book your corporate stay with us today and experience the perfect blend of comfort, convenience, and personalized service.
           </p>
-          
+
+          {error && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+              {success}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
                 <input
                   type="text"
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full bg-transparent border-b border-white/50 focus:outline-none focus:border-white text-white placeholder-white/70 px-0 py-3 text-lg pl-4"
+                  placeholder="Company Name *"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Contact Person</label>
                 <input
                   type="text"
                   name="contactPerson"
                   value={formData.contactPerson}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full bg-transparent border-b border-white/50 focus:outline-none focus:border-white text-white placeholder-white/70 px-0 py-3 text-lg pl-4"
+                  placeholder="Contact Person *"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full bg-transparent border-b border-white/50 focus:outline-none focus:border-white text-white placeholder-white/70 px-0 py-3 text-l pl-4"
+                  placeholder="Email Address *"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full bg-transparent border-b border-white/50 focus:outline-none focus:border-white text-white placeholder-white/70 px-0 py-3 text-lg pl-4"
+                  placeholder="Phone Number *"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Booking Details</label>
               <textarea
                 name="bookingDetails"
                 value={formData.bookingDetails}
                 onChange={handleChange}
                 rows="4"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full bg-transparent border-b border-white/50 focus:outline-none focus:border-white text-white placeholder-white/70 px-0 py-3 text-lg resize-none pl-4"
+                placeholder="Booking Details *"
                 required
+                disabled={isSubmitting}
               ></textarea>
             </div>
 
-            <motion.button
+            <button
               type="submit"
-              className="w-full bg-gradient-to-r from-yellow-500 to-red-600 text-white py-4 px-6 rounded-lg text-lg font-semibold hover:bg-gradient-to-l transition-colors"
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
+              className={`w-full bg-white text-amber-900 py-4 px-6 rounded-lg text-lg font-semibold transition-colors cursor-pointer
+                 ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200'
+              }`}
+              disabled={isSubmitting}
             >
-              Submit Corporate Booking
-            </motion.button>
+              {isSubmitting ? 'Submitting...' : 'Submit Corporate Booking'}
+            </button>
           </form>
         </div>
       </div>
@@ -191,24 +254,25 @@ const CorporateBooking = () => {
       <div className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-4xl mx-auto">
           <motion.h2
-            className="text-3xl font-extrabold text-center mb-12"
+            className="text-4xl font-bold text-center mb-4 text-amber-600"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            FAQs
+            Frequently Asked Questions
           </motion.h2>
+          <p className="text-center text-gray-600 mb-12">
+            Want to know what people ask? Here are some frequently asked questions about corporate bookings.
+          </p>
           <div className="space-y-6">
             {faqs.map((faq, index) => (
               <div key={index} className="border-b border-gray-200 pb-6">
-                <motion.h3
+                <h3
                   className="text-lg font-semibold mb-2 cursor-pointer"
                   onClick={() => toggleFAQ(index)}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
                 >
                   {faq.question}
-                </motion.h3>
+                </h3>
                 {faqOpen === index && (
                   <p className="text-gray-600">{faq.answer}</p>
                 )}
@@ -221,7 +285,7 @@ const CorporateBooking = () => {
   );
 };
 
-// Data for Benefits Section
+// Benefits and FAQs data remain unchanged
 const benefits = [
   {
     title: "Dedicated Relationship Manager",
@@ -249,7 +313,6 @@ const benefits = [
   }
 ];
 
-// Data for FAQ Section
 const faqs = [
   {
     question: "How Can I Contact My Dedicated Relationship Manager?",

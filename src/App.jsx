@@ -38,6 +38,9 @@ import WeddingEventPage from "./Pages/WeddingEventPage";
 import OccasionEventPage from "./Pages/OccasionEventPage";
 import CorporateEventPage from "./Pages/CorporateEventPage";
 import PropertyPage from "./Pages/PropertyPage";
+import BlogSection from "./assets/components/BlogSection";
+import Blog from "./Pages/Blog";
+import BlogDetail from "./Pages/BlogDetail";
 
 
 const Home = () => {
@@ -47,6 +50,7 @@ const Home = () => {
       <PropertySlider />
       <EventServices />
       <HotelsSection />
+      <BlogSection/>
       <TestimonialSlider />
     </>
   );
@@ -104,19 +108,21 @@ const App = () => {
             <Route path="/wedding-event" element={<WeddingEventPage />} />
             <Route path="/occasion-event" element={<OccasionEventPage />} />
             <Route path="/corporate-event" element={<CorporateEventPage />} />
-            <Route path="/home/jaipurroute" element={<JaipurPage />} />
+            {/* <Route path="/home/jaipurroute" element={<JaipurPage />} />
             <Route path="/home/shahpuraroute" element={<ShahpuraPage />} />
             <Route path="/home/bagruroute" element={<BagruPage />} />
             <Route path="/home/behrorroute" element={<BehrorPage />} />
             <Route path="/home/neelkaroute" element={<NeelkaPage />} />
             <Route path="/home/neemranaroute" element={<NeemranaPage />} />
-            <Route path="/home/bilaspurroute" element={<BilaspurPage />} />
+            <Route path="/home/bilaspurroute" element={<BilaspurPage />} /> */}
             <Route path="/about" element={<About />} />
             <Route path="/franchise" element={<Franchise />} />
             <Route path="/corporate-booking" element={<CorporateBooking />} />
             <Route path="/rooms" element={<Room />} /> {/* Add this route */}
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/career" element={<Career />} />
+            <Route path="/blog" element={<Blog/>}/>
+            <Route path="/blog/:id" element={<BlogDetail/>}/>
             {hotels.map((hotel) => (
               <Route
                 key={hotel._id}

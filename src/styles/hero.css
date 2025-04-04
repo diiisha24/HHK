@@ -1,15 +1,15 @@
 .hero-text-animation {
     display: inline-block;
-    font-size: 4rem; /* Adjust as per your design */
+    font-size: 3rem; /* Adjust as per your design */
     font-weight: bold;
-    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient from red to orange */
-    -webkit-background-clip: text; /* Apply gradient to text */
-    background-clip: text; /* Standard property for compatibility */
-    color: transparent; /* Make text color transparent to show the gradient */
-    animation: fadeInUp 2s ease-in-out infinite;
+    /* background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient from red to orange */
+    /* -webkit-background-clip: text; Apply gradient to text */
+    /* background-clip: text; Standard property for compatibility */
+    /* color: transparent; Make text color transparent to show the gradient */
+    /* animation: fadeInUp 2s ease-in-out infinite;
     transform: translateY(50px);
     opacity: 0;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6); /* Soft shadow for depth */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6); Soft shadow for depth */
 }
 
 /* Keyframe Animation */
@@ -32,15 +32,10 @@
 @media (max-width: 768px) {
     .hero-text-animation {
         font-size: 3rem; /* Adjust font size for smaller screens */
-        animation: fadeInUp 2s ease-in-out infinite; /* Retain animation on mobile */
+        /* animation: fadeInUp 2s ease-in-out infinite; Retain animation on mobile */
     }
 }
 
-/* Optional Glow Effect on Hover */
-.hero-text-animation:hover {
-    animation: glowEffect 1s ease-in-out infinite alternate; /* Add a glow effect on hover */
-    cursor: pointer; /* Make it clear that the text is interactive */
-}
 
 /* Glow Effect */
 @keyframes glowEffect {
